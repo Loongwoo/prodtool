@@ -1,0 +1,74 @@
+html {
+  height: 100%;
+}
+
+body {
+  position: relative;
+  margin: 16px;
+  height: calc(100% - 32px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.title {
+  flex: 0 0 30px;
+  line-height: 30px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.list {
+  flex: 1;
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  overflow: auto;
+}
+
+.list-item {
+  height: 36px;
+  line-height: 36px;
+  padding: 0 15px;
+  font-size: 14px;
+  vertical-align: middle;
+  color: rgba(0, 0, 0, 0.85);
+  border-bottom: 1px solid #eee;
+}
+
+.list-item.odd {
+  background: #eee;
+}
+
+.list-item.selected {
+  color: white;
+  background: lightskyblue;
+}
+
+.buttons {
+  flex: 0 0 50px;
+  height: 50px;
+  text-align: right;
+  line-height: 50px;
+  vertical-align: middle;
+}
+
+.btn-cancel {
+  width: 80px;
+  height: 36px;
+}
+
+.btn-ok {
+  width: 80px;
+  height: 36px;
+  margin-left: 16px;
+  background: #008cff;
+  border-color: #008cff;
+  color: white;
+}
+
+.btn-ok.disabled {
+  background: #ccc;
+  border-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link href="./styles.css" rel="stylesheet">
+    <title>选择串口</title>
+  </head>
+  <body>
+    <div class="title"> 选择串口 </div>
+
+    <div class="list" id="list"></div>
+
+    <div class="buttons">
+      <button class="btn-cancel" id="cancelBtn" type="button">取 消</button>
+      <button class="btn-ok disabled" id="okBtn" type="button" disabled>连 接</button>
+    </div>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>
