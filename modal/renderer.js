@@ -1,13 +1,12 @@
 const list = document.getElementById('list');
 const cancelBtn = document.getElementById('cancelBtn');
-const okBtn = document.getElementById('okBtn');
+const connectBtn = document.getElementById('connectBtn');
 
 let selectedPid;
 const setPortId = id => {
   selectedPid = id;
 
-  okBtn.className = 'btn-ok';
-  okBtn.removeAttribute('disabled');
+  connectBtn.removeAttribute('disabled');
   list.childNodes.forEach((el, i) => {
     el.className = id === el.id ? `list-item selected` : i % 2 ? `list-item odd` : `list-item`;
   });
@@ -16,22 +15,24 @@ const setPortId = id => {
 let sender;
 window.electronAPI.updateList((event, array) => {
   sender = event.sender;
-
+  list.innerHTML = '';
   array.forEach((port, index) => {
-    const { portId, portName } = port;
+    const { portId, portName, displayName } = port;
     const node = document.createElement('div');
     node.className = index % 2 ? `list-item odd` : `list-item`;
-    node.innerText = portName;
+    node.innerText = displayName ? `${displayName}(${portName})` : portName;
     node.id = portId;
     node.addEventListener('click', () => setPortId(portId));
     list.appendChild(node);
   });
 });
 
-cancelBtn.addEventListener('click', () => {
-  if (sender) sender.send('serial-port', undefined);
-});
+const callback = id => {
+  if (sender) sender.send('serial-port', id);
+  list.innerHTML = '';
+  connectBtn.setAttribute('disabled', true);
+};
 
-okBtn.addEventListener('click', () => {
-  if (sender) sender.send('serial-port', selectedPid);
-});
+cancelBtn.addEventListener('click', () => callback());
+
+connectBtn.addEventListener('click', () => callback(selectedPid));

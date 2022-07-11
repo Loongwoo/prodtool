@@ -4,12 +4,42 @@
   "description": "kiwik production tool",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "postinstall": "electron-builder install-app-deps",
+    "app:dir": "electron-builder --dir",
+    "app:dist": "electron-builder",
+    "app:win": "electron-builder --win --x64",
+    "app:linux": "electron-builder --linux",
+    "app:mac": "electron-builder --mac"
+  },
+  "build": {
+    "productName": "几维智能生产工具",
+    "appId": "com.kiwik.prodtool",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "buildResources": "build"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "assets/icon.icns"
+    },
+    "win": {
+      "icon": "assets/icon.png",
+      "target": "nsis"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "menuCategory": true,
+      "allowElevation": false,
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    }
   },
   "repository": "https://github.com/Loongwoo/prodtool",
   "author": "longwoo",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^19.0.8"
+    "electron": "^19.0.8",
+    "electron-builder": "^23.1.0"
   }
 }

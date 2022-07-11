@@ -1,65 +1,49 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
-const kOrigin = 'https://prodtool.kiwiot.com';
-
 const createWindow = () => {
   const mainWindow = new BrowserWindow({ width: 1080, height: 700 });
 
-  mainWindow.loadURL(`${kOrigin}/serial-tool`);
+  mainWindow.loadURL('https://prodtool.kiwiot.com/serial-tool');
+  // mainWindow.webContents.openDevTools();
 
-  mainWindow.webContents.session.on('select-serial-port', (event, portList, webContents, callback) => {
-    event.preventDefault();
-
-    const modal = new BrowserWindow({
-      parent: mainWindow,
-      width: 400,
-      height: 600,
-      modal: true,
-      show: false,
-      resizable: false,
-      webPreferences: {
-        preload: path.join(__dirname, 'modal/preload.js'),
-      },
-    });
-    modal.loadFile('./modal/index.html');
-    modal.once('ready-to-show', () => {
-      modal.webContents.send('update-list', portList);
-      modal.show();
-    });
-
-    // modal.webContents.openDevTools();
-
-    ipcMain.once('serial-port', (_event, portId = '') => {
-      callback(portId);
-      modal.close();
-    });
+  const modal = new BrowserWindow({
+    parent: mainWindow,
+    width: 400,
+    height: 600,
+    modal: true,
+    show: false,
+    resizable: false,
+    webPreferences: {
+      preload: path.join(__dirname, 'modal/preload.js'),
+    },
   });
 
-  // mainWindow.webContents.session.on('serial-port-added', (event, port) => {
-  //   console.log('serial-port-added FIRED WITH', port);
-  // });
-
-  // mainWindow.webContents.session.on('serial-port-removed', (event, port) => {
-  //   console.log('serial-port-removed FIRED WITH', port);
-  // });
-
-  mainWindow.webContents.session.setPermissionCheckHandler(
-    (webContents, permission, requestingOrigin, details) => {
-      if (permission === 'serial' && details.securityOrigin === `${kOrigin}/`) {
-        return true;
-      }
-    }
+  modal.webContents.session.setPermissionCheckHandler(
+    (webContents, permission, requestingOrigin, details) => permission === 'serial'
   );
 
-  mainWindow.webContents.session.setDevicePermissionHandler(details => {
-    if (details.deviceType === 'serial' && details.origin === kOrigin) {
-      return true;
-    }
+  modal.webContents.session.setDevicePermissionHandler(details => details.deviceType === 'serial');
+
+  modal.webContents.session.on('select-serial-port', (event, portList, webContents, callback) => {
+    modal.webContents.session.on('serial-port-added', (_event, port) => {
+      console.log('serial-port-added', port);
+    });
+    modal.webContents.session.on('serial-port-removed', (_event, port) => {
+      console.log('serial-port-removed', port);
+    });
+    // modal.webContents.openDevTools();
+    modal.webContents.send('update-list', portList);
+    modal.show();
+
+    event.preventDefault();
+    ipcMain.once('serial-port', (_event, portId = '') => {
+      callback(portId);
+      modal.hide();
+    });
   });
 
-  // 打开开发工具
-  // mainWindow.webContents.openDevTools();
+  modal.loadFile('./modal/index.html');
 };
 
 app.whenReady().then(() => {

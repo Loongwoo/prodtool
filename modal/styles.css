@@ -2,18 +2,24 @@ html {
   height: 100%;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   position: relative;
-  margin: 16px;
-  height: calc(100% - 32px);
+  height: 100%;
+  padding: 8px 16px;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .title {
   flex: 0 0 30px;
   line-height: 30px;
+  font-size: 14px;
+  font-weight: 600;
   vertical-align: middle;
   text-align: center;
 }
@@ -25,50 +31,57 @@ body {
   overflow: auto;
 }
 
-.list-item {
+.list > .list-item {
   height: 36px;
   line-height: 36px;
   padding: 0 15px;
-  font-size: 14px;
+  font-size: 12px;
   vertical-align: middle;
   color: rgba(0, 0, 0, 0.85);
   border-bottom: 1px solid #eee;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: nowrap;
 }
 
-.list-item.odd {
+.list > .list-item.odd {
   background: #eee;
 }
 
-.list-item.selected {
+.list > .list-item.selected {
   color: white;
   background: lightskyblue;
 }
 
 .buttons {
-  flex: 0 0 50px;
-  height: 50px;
+  flex: 0 0 48px;
+  height: 48px;
   text-align: right;
-  line-height: 50px;
+  line-height: 48px;
   vertical-align: middle;
 }
 
-.btn-cancel {
+.buttons > button {
   width: 80px;
-  height: 36px;
+  height: 32px;
 }
 
-.btn-ok {
-  width: 80px;
-  height: 36px;
+.buttons > button#connectBtn {
   margin-left: 16px;
-  background: #008cff;
-  border-color: #008cff;
+  background: rgba(0, 140, 256, 0.8);
+  border: 1px solid rgba(0, 140, 256, 1);
+  border-radius: 2px;
   color: white;
 }
 
-.btn-ok.disabled {
-  background: #ccc;
-  border-color: #ccc;
-  color: #666;
+.buttons > button#connectBtn:hover {
+  background: rgba(0, 140, 256, 1);
+}
+
+.buttons > button#connectBtn:disabled {
+  background: rgba(239, 239, 239, 0.3);
+  border: 1px solid rgba(118, 118, 118, 0.3);
+  color: rgba(0, 0, 0, 0.3);
   cursor: not-allowed;
 }
