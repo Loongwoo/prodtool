@@ -1,21 +1,27 @@
-const list = document.getElementById('list');
+const listNode = document.getElementById('list');
 const cancelBtn = document.getElementById('cancelBtn');
 const connectBtn = document.getElementById('connectBtn');
 
 let selectedPid;
 const setPortId = id => {
   selectedPid = id;
-
-  connectBtn.removeAttribute('disabled');
-  list.childNodes.forEach((el, i) => {
-    el.className = id === el.id ? `list-item selected` : i % 2 ? `list-item odd` : `list-item`;
-  });
+  if (id) {
+    connectBtn.removeAttribute('disabled');
+    listNode.childNodes.forEach((el, i) => {
+      el.className = id === el.id ? `list-item selected` : i % 2 ? `list-item odd` : `list-item`;
+    });
+  } else {
+    connectBtn.setAttribute('disabled', true);
+    listNode.innerHTML = '';
+  }
 };
 
 let sender;
 window.electronAPI.updateList((event, array) => {
   sender = event.sender;
-  list.innerHTML = '';
+
+  listNode.innerHTML = '';
+
   array.forEach((port, index) => {
     const { portId, portName, displayName } = port;
     const node = document.createElement('div');
@@ -23,16 +29,14 @@ window.electronAPI.updateList((event, array) => {
     node.innerText = displayName ? `${displayName}(${portName})` : portName;
     node.id = portId;
     node.addEventListener('click', () => setPortId(portId));
-    list.appendChild(node);
+    listNode.appendChild(node);
   });
 });
 
 const callback = id => {
   if (sender) sender.send('serial-port', id);
-  list.innerHTML = '';
-  connectBtn.setAttribute('disabled', true);
+  setPortId(undefined);
 };
 
 cancelBtn.addEventListener('click', () => callback());
-
 connectBtn.addEventListener('click', () => callback(selectedPid));
