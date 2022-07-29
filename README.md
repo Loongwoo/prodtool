@@ -13,4 +13,4 @@ $ yarn start
 
 ## Issue
 
-提了一个问题 [Web Serial API removed and added events are never called](https://github.com/electron/electron/issues/34887)，等待 [Electron](https://www.electronjs.org/) 发布新版本
+提了一个问题 [Web Serial API removed and added events are never called](https://github.com/electron/electron/issues/34887)已解决

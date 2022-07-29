@@ -12,8 +12,8 @@ const createWindow = () => {
     minHeight: 600,
     center: true,
   });
-  // mainWindow.loadURL('https://prodtool.kiwiot.com/serial-tool');
-  mainWindow.loadFile('index.html');
+  mainWindow.loadURL('https://prodtool.kiwiot.com/serial-tool');
+  // mainWindow.loadFile('index.html');
   // mainWindow.webContents.openDevTools();
 
   const modal = new BrowserWindow({
