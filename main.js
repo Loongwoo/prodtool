@@ -43,12 +43,16 @@ const createWindow = () => {
 
     if (modal.isVisible()) return;
 
-    // These two events never called: https://github.com/electron/electron/issues/34887
+    // https://github.com/electron/electron/issues/34887
     modal.webContents.session.on('serial-port-added', (_event, port) => {
-      console.log('serial-port-added', port);
+      portList.push(port);
+      modal.webContents.send('update-list', portList);
     });
+
     modal.webContents.session.on('serial-port-removed', (_event, port) => {
-      console.log('serial-port-removed', port);
+      const idx = portList.findIndex(x => x.portId === port.portId);
+      if (idx > -1) portList.splice(idx, 1);
+      modal.webContents.send('update-list', portList);
     });
 
     modal.show();

@@ -39,7 +39,7 @@
   "author": "longwoo",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^19.0.8",
+    "electron": "^20.0.0-beta.13",
     "electron-builder": "^23.1.0"
   }
 }
